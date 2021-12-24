@@ -78,9 +78,9 @@
         <mkdir dir="dist/portable" />
         <zip destfile="dist/portable/NanoHikari-linux.zip">
             <fileset dir="dist" includes="nanohikari.jar" />
-            <fileset dir="dist" includes="jlink/" />
+            <fileset dir="dist" includes="jlink/${application.title}" />
             <fileset dir="." includes="ressources/" />
-            <fileset dir="startingscripts" includes="NanoHikari-start.sh" />
+            <fileset dir="startingscripts" includes="${application.title}-start.sh" />
         </zip>
         
         <!--Production de la distribution JLink Windows-->
@@ -139,6 +139,14 @@
             <arg value="--output"/>
             <arg value="${dist.jlink.win.output}"/>
         </exec>
+        
+        <echo message="Creating the archive file for Windows"/>
+        <zip destfile="dist/portable/${application.title}-windows.zip">
+            <fileset dir="dist" includes="*.jar" />
+            <fileset dir="dist" includes="jlink/${application.title}-WIN/" />
+            <fileset dir="." includes="ressources/" />
+            <fileset dir="startingscripts" includes="${application.title}-start.bat" />
+        </zip>
     </target>
     
 </project>

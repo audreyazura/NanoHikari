@@ -1,1 +1,1 @@
-jlink\NanoHikari\bin\NanoHikari
+jlink\NanoHikari-WIN\bin\NanoHikari
