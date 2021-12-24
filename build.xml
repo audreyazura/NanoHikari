@@ -78,7 +78,7 @@
         <mkdir dir="dist/portable" />
         <zip destfile="dist/portable/NanoHikari-linux.zip">
             <fileset dir="dist" includes="nanohikari.jar" />
-            <fileset dir="dist" includes="jlink/${application.title}" />
+            <fileset dir="dist" includes="jlink/${application.title}/" />
             <fileset dir="." includes="ressources/" />
             <fileset dir="startingscripts" includes="${application.title}-start.sh" />
         </zip>

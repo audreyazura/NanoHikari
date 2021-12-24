@@ -2,13 +2,20 @@
 
 ## Goal
 
-This software aim to reproduce the luminscence of a quantum dot (QD) layer. It does so by simulating a QD layer with electrons, and simulate their recombinations. The obtained spectra can be compared to one taken from an experiment, and the QD density can then be adjusted in order to extract the QD distribution from the luminescence.
+This software aim to reproduce the luminescence of a quantum dot (QD) layer. It does so by simulating a QD layer with electrons, and simulate their recombinations.
 
-## Alpha version
+This software has several execution mode:
+- simulation of the luminescence, either under continuous light  or one shot illumination, of a sample with a randomly generated distribution of quantum dots from materials chosen by the user
+- simulation of the luminescence, either under continuous light  or one shot illumination, of a sample generated from an AFM image entered by the user
+- adjusting a distribution of quantum dot by comparing the simulated luminescence to an experimental, and try to deduce a more accurate QD distribution
 
-The software is in alpha at the moment. Most functionnality are there, and it can generate luminescence from an inputed Quantum Dot distribution. However, there is still a problem in the fitting function, and after a few fitting passes, the fit deviate strongly from the experimental luminescence. The reasons are still under investigation.
+## v1.0-beta
 
-At the moment, the input in the software works with configuration files, all situated in the /src/ressources folder.
+This version includes all the simulation goal: the software can generate the luminescence of a sample, either by generating a gaussian distribution of quantum or by generating it from a file entered by the user. It can simulate the luminescence either under single shot or under continuous excitation.
+
+A tentative fitting algorithm has also be implemented, but the results are not satisfactory at the moment. Try it at your risks.
+
+The alpha only has graphical interface for the ongoing simulation. All the information beforehand has to been entered in properties files in the /ressources folder, as described below.
 
 At the start, the software loads configuration/default.conf. This file must contain the adress to a luminescence file, as well as a metamaterial. Only the QD distribution file is optionnal. The material is refered to by its ID.
 
