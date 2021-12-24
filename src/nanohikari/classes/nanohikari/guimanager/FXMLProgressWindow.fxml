@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:controller="nanohikari.guimanager.ProgressWindowController" xmlns:fx="http://javafx.com/fxml/1"
+      styleClass="mainvbox">
+        
+    <stylesheets>
+        <URL value="@WindowsStyle.css" />
+    </stylesheets>
+    
+    <TextArea wrapText="true" HBox.hgrow="ALWAYS" styleClass="console"
+              prefHeight="350" fx:id="consoleWindow" />
+    
+    <HBox styleClass="hbox" >
+        <VBox styleClass="internalvbox" HBox.hgrow="ALWAYS" fx:id="pbarBox" fillWidth="true" >
+            <Label text="" fx:id="progressTitle" />
+            
+            <HBox styleClass="hbox" HBox.hgrow="ALWAYS" fillHeight="true" >
+                <Label fx:id="timeLabel" />
+                <Region HBox.hgrow= "ALWAYS" />
+                <Label fx:id="electronTrackerLabel" />
+            </HBox>
+
+            <ProgressBar fx:id="mainPbar" progress="0" prefHeight="50" />
+        </VBox>
+    </HBox>
+    
+</VBox>

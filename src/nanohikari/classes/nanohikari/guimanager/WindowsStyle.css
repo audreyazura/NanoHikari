@@ -1,0 +1,93 @@
+/*
+Copyright (C) 2021 audreyazura
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : 21 Jun 2021, 21:20:56
+    Author     : audreyazura
+*/
+
+/*
+Copyright (C) 2020 Alban Lafuente
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : 14 Apr 2020, 20:03:11
+    Author     : Alban Lafuente
+*/
+
+.console
+{
+    -fx-display-caret: false;
+    -fx-font-family: IBMPlexMono-Regular;
+    -fx-text-fill: whitesmoke;
+}
+
+.console .content
+{
+    -fx-background-color: black;
+}
+
+.hbox
+{
+    -fx-spacing: 15px;
+    -fx-fill-height: true;
+    -fx-alignment: center-left;
+}
+
+.internalvbox
+{
+    -fx-alignment: top-left;
+    -fx-fill-width: true;
+    -fx-spacing: 5px;
+    -fx-padding: 0px 0px 5px 0px; /*top, right, bottom, left*/
+}
+
+.label
+{
+    -fx-font-family: SourceSansPro;
+    -fx-text-alignment: justify;
+}
+
+.mainvbox
+{
+    -fx-spacing: 10px;
+    -fx-alignment: top-left;
+    -fx-fill-width: true;
+    -fx-padding: 15px 20px 20px 20px; /*top, right, bottom, left*/
+}
+
+.pbar
+{
+    -fx-progress-color: #000000;
+}
+
+.windowtext
+{
+    -fx-font-family: SourceSansPro;
+    -fx-text-alignment: justify;
+}
