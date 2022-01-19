@@ -186,7 +186,7 @@ public class GeneratorManager implements Runnable
         List<Electron> recalculatedELectronList;
         try
         {
-            while(m_finalElectronList.size() != m_neededRecombinations)
+            while(m_finalElectronList.size() < m_neededRecombinations)
             {
                 recalculatedELectronList = new ArrayList<>();
                 
