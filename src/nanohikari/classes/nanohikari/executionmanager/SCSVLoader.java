@@ -25,7 +25,7 @@ import java.util.zip.DataFormatException;
 
 /**
  *
- * @author audreyazura
+ * @author Alban Lafuente
  */
 public class SCSVLoader implements ContinuousFunctionFileLoader
 {

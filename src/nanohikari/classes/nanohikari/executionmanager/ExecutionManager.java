@@ -52,7 +52,7 @@ import javafx.scene.image.Image;
 
 /**
  *
- * @author audreyazura
+ * @author Alban Lafuente
  */
 public class ExecutionManager implements Runnable
 {

@@ -25,7 +25,7 @@ import java.util.Set;
 
 /**
  *
- * @author audreyazura
+ * @author Alban Lafuente
  */
 public class SimulationJudge
 {

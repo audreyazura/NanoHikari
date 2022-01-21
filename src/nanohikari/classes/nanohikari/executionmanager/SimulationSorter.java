@@ -32,7 +32,7 @@ import java.util.TreeSet;
 
 /**
  *
- * @author alafuente
+ * @author Alban Lafuente
  */
 public class SimulationSorter
 {

@@ -29,7 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author audreyazura
+ * @author Alban Lafuente
  */
 public class ResultMonitor implements Runnable
 {

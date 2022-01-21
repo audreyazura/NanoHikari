@@ -20,7 +20,7 @@ import javafx.scene.image.Image;
 
 /**
  *
- * @author audreyazura
+ * @author Alban Lafuente
  */
 public interface GUIUpdater
 {

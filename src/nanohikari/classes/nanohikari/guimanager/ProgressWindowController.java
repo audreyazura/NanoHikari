@@ -25,7 +25,7 @@ import javafx.scene.layout.VBox;
 
 /**
  *
- * @author audreyazura
+ * @author Alban Lafuente
  */
 public class ProgressWindowController
 {

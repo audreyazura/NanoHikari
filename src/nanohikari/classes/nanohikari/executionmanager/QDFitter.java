@@ -30,7 +30,7 @@ import java.util.TreeSet;
 
 /**
  *
- * @author audreyazura
+ * @author Alban Lafuente
  */
 public class QDFitter
 {
