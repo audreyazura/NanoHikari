@@ -127,7 +127,7 @@ public class GeneratorManager implements Runnable
     public HashSet<Electron> getFinalElectronList()
     {
         HashSet<Electron> result = new HashSet<>();
-        if (m_finalElectronList.size() == m_neededRecombinations)
+        if (m_finalElectronList.size() >= m_neededRecombinations)
         {
             int newID = m_nElectrons;
             
