@@ -192,7 +192,7 @@ public class ExecutionManager implements Runnable
         }
         m_numberElectron = tempnElectron;
         
-        //getting the number of expacted recombination
+        //getting the number of expected recombination
         String repetitionString = p_configuration.getProperty("number_recombinations");
         int requestedRecombinations = 0;
         try
@@ -209,13 +209,13 @@ public class ExecutionManager implements Runnable
                 }
                 else
                 {
-                    Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, "number of expected repetions has to be defined for continuous integration", new IOException());
+                    Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, "number of expected recombination has to be defined for continuous integration", new IOException());
                 }
             }
         }
         catch(NumberFormatException ex)
         {
-            Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, "number of expected repetions has to be an integer", ex);
+            Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, "number of expected recombination has to be an integer", ex);
         }
         m_numberRecombinations = requestedRecombinations;
         
@@ -404,67 +404,60 @@ public class ExecutionManager implements Runnable
         
         //generating the QDs to be send
         String qdsPath = p_configuration.getProperty("QDs_distribution");
-        try
-        {
-            //getting the functions giving the capture time, escape time and recombination time as a function of the size of the QD.
-            //capture time reference: https://aip.scitation.org/doi/10.1063/1.1512694
-            //escape time reference: https://aip.scitation.org/doi/10.1063/1.4824469
-            
-            //making the QD distribution
-            if (qdsPath.equals(""))
-            {
-                System.out.println("Generating the QD distribution\n");
-                m_gui.sendMessage("Generating the QD distribution\n");
+        //getting the functions giving the capture time, escape time and recombination time as a function of the size of the QD.
+        //capture time reference: https://aip.scitation.org/doi/10.1063/1.1512694
+        //escape time reference: https://aip.scitation.org/doi/10.1063/1.4824469
 
-                //QDs are randomly generated with size following a normal distribution
-                int nQDs = 400;
-                BigDecimal three = new BigDecimal("3");
-                for (int i = 0 ; i < nQDs ; i += 1)
+        //making the QD distribution
+        if (qdsPath.equals(""))
+        {
+            System.out.println("Generating the QD distribution\n");
+            m_gui.sendMessage("Generating the QD distribution\n");
+
+            //QDs are randomly generated with size following a normal distribution
+            int nQDs = 400;
+            BigDecimal three = new BigDecimal("3");
+            for (int i = 0 ; i < nQDs ; i += 1)
+            {
+                BigDecimal x, y, radiusNano, radius, height;
+                QuantumDot createdQD;
+
+                do
                 {
-                    BigDecimal x, y, radiusNano, radius, height;
-                    QuantumDot createdQD;
+                    x = formatBigDecimal((new BigDecimal(m_RNGenerator.nextDouble())).multiply(p_sampleXSize));
+                    y = formatBigDecimal((new BigDecimal(m_RNGenerator.nextDouble())).multiply(p_sampleYSize));
 
                     do
                     {
-                        x = formatBigDecimal((new BigDecimal(m_RNGenerator.nextDouble())).multiply(p_sampleXSize));
-                        y = formatBigDecimal((new BigDecimal(m_RNGenerator.nextDouble())).multiply(p_sampleYSize));
+                        radiusNano = new BigDecimal(m_RNGenerator.nextGaussian() * 2.1 + 12);
+                        radius = formatBigDecimal(radiusNano.multiply(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
 
-                        do
-                        {
-                            radiusNano = new BigDecimal(m_RNGenerator.nextGaussian() * 2.1 + 12);
-                            radius = formatBigDecimal(radiusNano.multiply(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
+                    }while (radius.compareTo(BigDecimal.ZERO) <= 0);
 
-                        }while (radius.compareTo(BigDecimal.ZERO) <= 0);
-                        
-                        do
-                        {
-                            /**
-                             * the height is correlated to the radius with the relation
-                             * height = radius / 3 - 1.5
-                             * with a variation of about +/- 0.5 around the line. To reproduce that variation, we use the relation
-                             * height = radius / 3 + GaussianRNG*0.5 - 1.5
-                             * GaussianRNG giving a number on a gaussian centered on 0 with a variance of 1.
-                             */
-                            height = formatBigDecimal((radiusNano.divide(three, MathContext.DECIMAL128)).add(new BigDecimal(m_RNGenerator.nextGaussian()*0.5 - 1.5)).multiply(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
-                        }while(height.compareTo(BigDecimal.ZERO) <= 0);
+                    do
+                    {
+                        /**
+                         * the height is correlated to the radius with the relation
+                         * height = radius / 3 - 1.5
+                         * with a variation of about +/- 0.5 around the line. To reproduce that variation, we use the relation
+                         * height = radius / 3 + GaussianRNG*0.5 - 1.5
+                         * GaussianRNG giving a number on a gaussian centered on 0 with a variance of 1.
+                         */
+                        height = formatBigDecimal((radiusNano.divide(three, MathContext.DECIMAL128)).add(new BigDecimal(m_RNGenerator.nextGaussian()*0.5 - 1.5)).multiply(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
+                    }while(height.compareTo(BigDecimal.ZERO) <= 0);
 
-                        createdQD = new QuantumDot(x, y, radius, height, m_timeStep, m_sampleMaterial);
+                    createdQD = new QuantumDot(x, y, radius, height, m_timeStep, m_sampleMaterial);
 
-                    }while(!validPosition(createdQD, m_QDList));
-                    
-                    m_QDList.add(createdQD);
-                }
+                }while(!validPosition(createdQD, m_QDList));
+
+                m_QDList.add(createdQD);
             }
-            else
+        }
+        else
+        {
+            try
             {
-               //QDs are extracted from file
-                String[] nameSplit = qdsPath.split("\\.");
-
-                if (!nameSplit[nameSplit.length-1].equals("csv"))
-                {
-                    throw new DataFormatException();
-                }
-
+                //QDs are extracted from file
                 BufferedReader fileReader = new BufferedReader(new FileReader(new File(qdsPath)));
                 Pattern numberRegex = Pattern.compile("^\\-?\\d+(\\.\\d+(e(\\+|\\-)\\d+)?)?");
 
@@ -485,10 +478,10 @@ public class ExecutionManager implements Runnable
                     }
                 }
             }
-        }
-        catch (DataFormatException|IOException ex)
-        {
-            Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, null, ex);
+            catch (IOException ex)
+            {
+                Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
