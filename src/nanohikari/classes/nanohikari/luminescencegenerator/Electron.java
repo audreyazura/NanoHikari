@@ -150,7 +150,7 @@ public class Electron extends AbsorberObject
                                 BigDecimal distance = getDistance(QD.getX(), QD.getY()).subtract(QD.getRadius());
                                 if (distance.compareTo(electronVision) <= 0)
                                 {
-                                    if (QD.capture(p_RNG, distance, electronVision))
+                                    if (QD.capture(p_RNG, this, distance, electronVision))
                                     {
                                         m_state = ElectronState.CAPTURED;
                                         m_trapingDot = QD;
@@ -189,13 +189,13 @@ public class Electron extends AbsorberObject
             }
             else
             {
-                if ((m_recombinationEnergy = m_trapingDot.recombine(p_RNG)).compareTo(BigDecimal.ZERO) >= 0)
+                if ((m_recombinationEnergy = m_trapingDot.recombine(p_RNG, this)).compareTo(BigDecimal.ZERO) >= 0)
                 {
                     m_state = ElectronState.RECOMBINED;
                 }
                 else
                 {
-                    if (m_trapingDot.escape(p_RNG))
+                    if (m_trapingDot.escape(p_RNG, this))
                     {
                         m_state = ElectronState.FREE;
                         m_positionX = m_trapingDot.getX();
