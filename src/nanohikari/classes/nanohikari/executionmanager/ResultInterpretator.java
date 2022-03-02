@@ -16,10 +16,13 @@
  */
 package nanohikari.executionmanager;
 
+import albanlafuente.physicstools.physics.PhysicsVariables;
 import nanohikari.luminescencegenerator.Electron;
 import nanohikari.luminescencegenerator.ImageBuffer;
 import nanohikari.luminescencegenerator.QuantumDot;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -55,7 +58,8 @@ public class ResultInterpretator implements ImageBuffer
             }
         }
         
-        String timeUnit = p_time.toPlainString() + " ns";
+        BigDecimal timens = (p_time.divide(PhysicsVariables.UnitsPrefix.NANO.getMultiplier(), MathContext.DECIMAL128)).setScale(3, RoundingMode.HALF_UP);
+        String timeUnit = timens.toPlainString() + " ns";
         String recombinedRatio = numberRecombinedElectron + "/" + p_neededRecombinations;
         
         m_gui.updateProgress((double) numberRecombinedElectron / p_neededRecombinations, timeUnit, recombinedRatio);

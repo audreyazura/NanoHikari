@@ -22,6 +22,7 @@ import albanlafuente.physicstools.physics.PhysicsVariables;
 import com.sun.jdi.AbsentInformationException;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +36,7 @@ public class ResultMonitor implements Runnable
 {
     private final boolean m_convertEnergy;
     private final ExecutionManager m_manager;
+    private final GUIUpdater m_gui;
     private GeneratorManager m_simulator;
     private Thread m_monitoredThread;
     
@@ -42,14 +44,16 @@ public class ResultMonitor implements Runnable
     {
         m_convertEnergy = false;
         m_manager = null;
+        m_gui = null;
         m_simulator = null;
         m_monitoredThread = null;
     }
     
-    public ResultMonitor (boolean p_convertEnergy, ExecutionManager p_manager, GeneratorManager p_simulator, Thread p_toMonitor)
+    public ResultMonitor (boolean p_convertEnergy, ExecutionManager p_manager, GUIUpdater p_gui, GeneratorManager p_simulator, Thread p_toMonitor)
     {
         m_convertEnergy = p_convertEnergy;
         m_manager = p_manager;
+        m_gui = p_gui;
         m_simulator = p_simulator;
         m_monitoredThread = p_toMonitor;
     }
@@ -68,6 +72,10 @@ public class ResultMonitor implements Runnable
                 Logger.getLogger(ResultMonitor.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            BigDecimal timens = (m_simulator.getTime().divide(PhysicsVariables.UnitsPrefix.NANO.getMultiplier(), MathContext.DECIMAL128)).setScale(3, RoundingMode.HALF_UP);
+            System.out.println("Total simulated time: " + timens + " nanoseconds");
+            m_gui.sendMessage("Total simulated time: " + timens + " nanoseconds");
+            
             HashSet<Electron> results = m_simulator.getFinalElectronList();
             if (results.size() > 0)
             {

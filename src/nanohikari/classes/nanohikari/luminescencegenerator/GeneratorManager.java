@@ -49,6 +49,7 @@ public class GeneratorManager implements Runnable
     private final int m_neededRecombinations;
     private final List<QuantumDot> m_QDList;
     
+    private BigDecimal m_timeElapsed = new BigDecimal(BigDecimal.ZERO.toString());
     private int m_nElectrons;
     
     //a map of the abscissa, separated in column, containing sets of QD present at that abscissa
@@ -141,6 +142,11 @@ public class GeneratorManager implements Runnable
         return result;
     }
     
+    public BigDecimal getTime()
+    {
+        return new BigDecimal(m_timeElapsed.toString());
+    }
+    
     @Override
     public void run()
     {
@@ -181,8 +187,7 @@ public class GeneratorManager implements Runnable
         }
         
         //calculation start!
-        BigDecimal timePassed = BigDecimal.ZERO;
-        m_output.logObjects(electronList, m_neededRecombinations, m_QDList, timePassed);
+        m_output.logObjects(electronList, m_neededRecombinations, m_QDList, m_timeElapsed);
         List<Electron> recalculatedELectronList;
         try
         {
@@ -191,7 +196,7 @@ public class GeneratorManager implements Runnable
                 recalculatedELectronList = new ArrayList<>();
                 
                 //advancing time logger (can be done before the calculation, the time logger is not taken into them)
-                timePassed = timePassed.add(m_timeStep);
+                m_timeElapsed = m_timeElapsed.add(m_timeStep);
                 
                 //calculating the electrons movement
                 for (int i = 0 ; i < numberOfChunks ; i += 1)
@@ -235,8 +240,7 @@ public class GeneratorManager implements Runnable
                 }
 
                 //sending the new data to the visualisation interface
-                BigDecimal timeNanosec = (timePassed.divide(PhysicsVariables.UnitsPrefix.NANO.getMultiplier(), MathContext.DECIMAL128)).setScale(3, RoundingMode.HALF_UP);
-                m_output.logObjects(recalculatedELectronList, m_neededRecombinations, m_QDList, timeNanosec);
+                m_output.logObjects(recalculatedELectronList, m_neededRecombinations, m_QDList, m_timeElapsed);
             }
         }
         catch (InterruptedException ex)

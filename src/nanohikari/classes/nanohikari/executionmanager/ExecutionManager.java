@@ -470,7 +470,7 @@ public class ExecutionManager implements Runnable
                     {
                         BigDecimal x = GeneratorManager.formatBigDecimal((new BigDecimal(lineSplit[0].strip())).multiply(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
                         BigDecimal y = GeneratorManager.formatBigDecimal((new BigDecimal(lineSplit[1].strip())).multiply(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
-                        BigDecimal radius = GeneratorManager.formatBigDecimal(((new BigDecimal(lineSplit[2].strip())).divide(new BigDecimal("2"), MathContext.DECIMAL128)).multiply(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
+                        BigDecimal radius = GeneratorManager.formatBigDecimal((new BigDecimal(lineSplit[2].strip())).multiply(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
                         BigDecimal height = GeneratorManager.formatBigDecimal((new BigDecimal(lineSplit[3].strip())).multiply(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
 
                         QuantumDot currentQD = new QuantumDot(x, y, radius, height, m_timeStep, m_sampleMaterial);
@@ -494,7 +494,7 @@ public class ExecutionManager implements Runnable
             GeneratorManager luminescenceGenerator = new GeneratorManager(m_sampleXSize, m_sampleYSize, m_timeStep, new BigDecimal("300"), m_isContinuousIntegration, GUICommunicator, m_numberRecombinations, m_numberElectron, m_QDList);
             Thread generatorThread = new Thread(luminescenceGenerator);
             
-            ResultMonitor monitor = new ResultMonitor(m_wavelengthAbscissa, this, luminescenceGenerator, generatorThread);
+            ResultMonitor monitor = new ResultMonitor(m_wavelengthAbscissa, this, m_gui, luminescenceGenerator, generatorThread);
             Thread monitorThread = new Thread(monitor);
             
             System.out.println("Starting simulation " + (m_loopCounter + 1));
