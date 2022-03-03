@@ -68,7 +68,7 @@ public class QuantumDot extends AbsorberObject
      * @param p_electrons
      * @param p_nbFreeLevels 
      */
-    private QuantumDot (BigDecimal p_positionX, BigDecimal p_positionY, BigDecimal p_radius, BigDecimal p_height, BigDecimal p_meanEnergy, double p_captureProba, double p_escapeProba, double p_recombinationProba, Map<BigDecimal, BigDecimal> p_energyLevelsPopProba, Map<BigDecimal, Integer> p_freeStates, Map<Electron, BigDecimal> p_electrons, int p_nbFreeLevels)
+    private QuantumDot (ArrayList<BigDecimal> p_states, BigDecimal p_positionX, BigDecimal p_positionY, BigDecimal p_radius, BigDecimal p_height, BigDecimal p_meanEnergy, double p_captureProba, double p_escapeProba, double p_recombinationProba, Map<BigDecimal, BigDecimal> p_energyLevelsPopProba, Map<BigDecimal, Integer> p_freeStates, Map<Electron, BigDecimal> p_electrons, int p_nbFreeLevels)
     {
         m_positionX = new BigDecimal(p_positionX.toString());
         m_positionY = new BigDecimal(p_positionY.toString());
@@ -79,7 +79,12 @@ public class QuantumDot extends AbsorberObject
         m_escapeProbability = p_escapeProba;
         m_recombinationProbability = p_recombinationProba;
         m_numberOfFreeStates = p_nbFreeLevels;
+        
         m_listOfStates = new ArrayList<>();
+        for (BigDecimal state: p_states)
+        {
+            m_listOfStates.add(new BigDecimal(state.toString()));
+        }
         
         m_flatOccupationProbabilities = new HashMap<>();
         for (BigDecimal level: p_energyLevelsPopProba.keySet())
@@ -218,8 +223,6 @@ public class QuantumDot extends AbsorberObject
             m_meanQDEnergy = meanEnergy;
         }
         
-//       System.out.println(m_recombinationProbaTree.size() + "\t" + m_baseCaptureProbability + "\t" + canCapture());
-        
         //the escape probability is calculated using P_capture = 1 - exp(-Δt/tau_escape) with tau_escape from https://aip.scitation.org/doi/10.1063/1.4824469
         m_escapeProbability = (BigDecimal.ONE.subtract(BigDecimalMath.exp(p_timeStep.negate().divide(QDMaterial.getEscapeTime(m_radius), MathContext.DECIMAL128)))).doubleValue();
         
@@ -326,22 +329,22 @@ public class QuantumDot extends AbsorberObject
                         sumOfProba = sumOfProba.add(m_flatOccupationProbabilities.get(state));
                     }
                 }
-                
+
                 //calculating the normalized proba so that the sum of the proba for each level equal one (we know the electron is now on one of them)
                 double sumOfPreviousProba = 0;
                 HashMap<Double, BigDecimal> statesProba = new HashMap<>();
                 for (BigDecimal state: availableStates)
                 {
-                    double normalizedProba = (m_flatOccupationProbabilities.get(state).divide(sumOfProba)).doubleValue();
+                    double normalizedProba = (m_flatOccupationProbabilities.get(state).divide(sumOfProba, MathContext.DECIMAL128)).doubleValue();
                     sumOfPreviousProba += normalizedProba;
                     if (state.compareTo(availableStates.last()) == 0  && sumOfPreviousProba < 1)
                     {
                         sumOfPreviousProba = 1;
                     }
-                    
+
                     statesProba.put(sumOfPreviousProba, state);
                 }
-                
+
                 //getting the level where the electron will be stored
                 double randomNumber = p_RNG.nextDouble();
                 TreeSet<Double> probaSet = new TreeSet(statesProba.keySet());
@@ -349,10 +352,10 @@ public class QuantumDot extends AbsorberObject
                 double proba = probaSet.first();
                 while (probaIterator.hasNext() && (proba = probaIterator.next()) < randomNumber){}
                 BigDecimal populatedState = statesProba.get(proba);
-                
+
                 m_freeStates.put(populatedState, m_freeStates.get(populatedState) - 1);
                 m_electronsEnergy.put(electronToCapture, populatedState);
-                
+
                 m_numberOfFreeStates -= 1;
                 result = true;
             }
@@ -367,7 +370,7 @@ public class QuantumDot extends AbsorberObject
      */
     public QuantumDot copy()
     {
-        return new QuantumDot(m_positionX, m_positionY, m_radius, m_height, m_meanQDEnergy, m_baseCaptureProbability, m_escapeProbability, m_recombinationProbability, m_flatOccupationProbabilities, m_freeStates, m_electronsEnergy, m_numberOfFreeStates);
+        return new QuantumDot(m_listOfStates, m_positionX, m_positionY, m_radius, m_height, m_meanQDEnergy, m_baseCaptureProbability, m_escapeProbability, m_recombinationProbability, m_flatOccupationProbabilities, m_freeStates, m_electronsEnergy, m_numberOfFreeStates);
     }
     
     public QuantumDot copyWithSizeChange(BigDecimal p_sizeMultiplier, BigDecimal p_timeStep, Metamaterial p_sampleMaterial)
