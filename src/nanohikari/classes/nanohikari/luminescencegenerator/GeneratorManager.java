@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -241,6 +240,15 @@ public class GeneratorManager implements Runnable
 
                 //sending the new data to the visualisation interface
                 m_output.logObjects(recalculatedELectronList, m_neededRecombinations, m_QDList, m_timeElapsed);
+                
+                //reorganizing electrons in a QD if a recombination occured in it
+                for (QuantumDot qd: m_QDList)
+                {
+                    if (qd.hasRecombined())
+                    {
+                        qd.reorganize(m_randomGenerator);
+                    }
+                }
             }
         }
         catch (InterruptedException ex)
