@@ -667,11 +667,11 @@ public class ExecutionManager implements Runnable
         {
             BufferedWriter resultWriter = new BufferedWriter(new FileWriter(QDFile));
 
-            resultWriter.write("x (nm)\ty (nm)\tradius (nm)\theight (nm)\tenergy (eV)");
+            resultWriter.write("x (nm)\ty (nm)\tradius (nm)\theight (nm)");
             resultWriter.newLine();
             for(QuantumDot qd: m_QDList)
             {
-                resultWriter.write(qd.scaledString(PhysicsVariables.UnitsPrefix.NANO.getMultiplier(), PhysicsVariables.EV));
+                resultWriter.write(qd.scaledString(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
                 resultWriter.newLine();
             }
 
@@ -680,10 +680,10 @@ public class ExecutionManager implements Runnable
         }
         catch (IOException ex)
         {
-            System.out.println("x (nm)\ty (nm)\tradius (nm)\theight (nm)\tenergy (eV)");
+            System.out.println("x (nm)\ty (nm)\tradius (nm)\theight (nm)");
             for (QuantumDot qd: m_QDList)
             {
-                System.out.println(qd.scaledString(PhysicsVariables.UnitsPrefix.NANO.getMultiplier(), PhysicsVariables.EV));
+                System.out.println(qd.scaledString(PhysicsVariables.UnitsPrefix.NANO.getMultiplier()));
             }
 
             Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, "Problem while writing the result file.", ex);

@@ -611,7 +611,7 @@ public class QuantumDot extends AbsorberObject
         m_hasRecombined = false;
     }
     
-    public String scaledString(BigDecimal p_sizeScale, BigDecimal p_energyScale)
+    public String scaledString(BigDecimal p_sizeScale)
     {
         //new scale: number.scale() - number.precision() gives the number of digits after the point in scientific notation. Setting the scale to this + 11 gives us at least 10 digits after the points, which is enough
         BigDecimal scaledX = (m_positionX.divide(p_sizeScale, MathContext.DECIMAL128)).setScale(m_positionX.scale() - m_positionX.precision() + 11, RoundingMode.HALF_UP).stripTrailingZeros();
