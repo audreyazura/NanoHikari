@@ -16,7 +16,7 @@
     </stylesheets>
     
     <TextArea wrapText="true" HBox.hgrow="ALWAYS" styleClass="console"
-              prefHeight="350" fx:id="consoleWindow" />
+              prefHeight="350" fx:id="consoleWindow" editable="false" />
     
     <HBox styleClass="hbox" >
         <VBox styleClass="internalvbox" HBox.hgrow="ALWAYS" fx:id="pbarBox" fillWidth="true" >
