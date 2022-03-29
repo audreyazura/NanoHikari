@@ -30,5 +30,7 @@ public interface GUIUpdater
     
     public void showPicture(Image p_picture, String p_title, String p_position);
     
+    public void stopExecution();
+    
     public void updateProgress (double p_progress, String p_time, String p_recombinedElectrons);
 }

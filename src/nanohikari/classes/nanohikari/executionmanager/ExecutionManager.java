@@ -59,6 +59,7 @@ public class ExecutionManager implements Runnable
     private final BigDecimal m_sampleXSize;
     private final BigDecimal m_sampleYSize;
     private final BigDecimal m_timeStep;
+    private final boolean m_autoexit;
     private final boolean m_gnuplotInstalled;
     private final boolean m_isContinuousIntegration;
     private final boolean m_isFittingMode;
@@ -121,6 +122,10 @@ public class ExecutionManager implements Runnable
         {
             Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, null, new IOException("abscissa type undefined"));
         }
+        if (!configKeys.contains("autoexit"))
+        {
+            Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, null, new IOException("define if the simulation should autoexit"));
+        }
             
         boolean containsTimestepKey = false;
         Pattern timeStepKeyPattern = Pattern.compile("simulation_timestep_.{0,1}s");
@@ -166,6 +171,14 @@ public class ExecutionManager implements Runnable
         {
             Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, null, new IOException("Please select an abscissa type between \"wavelength\" and \"energy\""));
         }
+        
+        //say if the application should autoexit
+        String autoexitValue = p_configuration.getProperty("autoexit");
+        if (!autoexitValue.equals("true") && !autoexitValue.equals("false"))
+        {
+            Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, null, new IOException("Please select chose if the program should autoexit (value \"true\") or not (value \"false\")"));
+        }
+        m_autoexit = Boolean.valueOf(autoexitValue);
 
         //initializing timestep
         BigDecimal timeStepUnitMultiplier = PhysicsVariables.UnitsPrefix.selectPrefix(timeStepKey.split("_")[2]).getMultiplier();
@@ -685,35 +698,41 @@ public class ExecutionManager implements Runnable
         {
             System.out.println("Ending the simulation.");
             m_gui.sendMessage("Ending the simulation.");
-            
-            if (m_gnuplotInstalled)
+            if (!m_autoexit)
             {
-                //creating a gif of the result if Image Magick is installed
-                try
+                if (m_gnuplotInstalled)
                 {
-                    if (m_maxLoop > 1)
-                    {
-                        Runtime.getRuntime().exec("convert -delay 500 " + m_calculatedSpectraDirectory + "Spectra*.png " + m_calculatedSpectraDirectory + "Spectra.gif");
-                    }
-                }
-                catch (IOException ex)
-                {
-                    Logger.getLogger(ExecutionManager.class.getName()).log(Level.FINE, "Image Magick not installed.", ex);
-                }
-
-                //showing the final result on screen
-                Platform.runLater(() ->
-                {
+                    //creating a gif of the result if Image Magick is installed
                     try
                     {
-                        m_gui.showPicture(new Image(new FileInputStream(m_calculatedSpectraDirectory + "Spectra" + m_loopCounter + ".png")), "Spectra", "left");
-                        m_gui.showPicture(new Image(new FileInputStream(m_calculatedTimeResolvedPLDirectory + "TimeResolved" + m_loopCounter + ".png")), "Time Resolved", "right");
+                        if (m_maxLoop > 1)
+                        {
+                            Runtime.getRuntime().exec("convert -delay 500 " + m_calculatedSpectraDirectory + "Spectra*.png " + m_calculatedSpectraDirectory + "Spectra.gif");
+                        }
                     }
-                    catch (FileNotFoundException ex)
+                    catch (IOException ex)
                     {
-                        Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ExecutionManager.class.getName()).log(Level.FINE, "Image Magick not installed.", ex);
                     }
-                });
+
+                    //showing the final result on screen
+                    Platform.runLater(() ->
+                    {
+                        try
+                        {
+                            m_gui.showPicture(new Image(new FileInputStream(m_calculatedSpectraDirectory + "Spectra" + m_loopCounter + ".png")), "Spectra", "left");
+                            m_gui.showPicture(new Image(new FileInputStream(m_calculatedTimeResolvedPLDirectory + "TimeResolved" + m_loopCounter + ".png")), "Time Resolved", "right");
+                        }
+                        catch (FileNotFoundException ex)
+                        {
+                            Logger.getLogger(ExecutionManager.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+                }
+            }
+            else
+            {
+                m_gui.stopExecution();
             }
         }
         else

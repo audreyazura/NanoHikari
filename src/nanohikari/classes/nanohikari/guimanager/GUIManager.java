@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -146,5 +147,11 @@ public class GUIManager extends Application implements GUIUpdater
     public void updateProgress (double p_progress, String p_time, String p_recombinedElectrons)
     {
         m_progressWindow.updateProgress(p_progress, p_time, p_recombinedElectrons);
+    }
+    
+    @Override
+    public void stopExecution()
+    {
+        Platform.exit();
     }
 }
