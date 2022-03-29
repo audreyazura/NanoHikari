@@ -46,13 +46,10 @@ public class SimulationSorter
     {
         m_wavelengthAbscissa = p_wavelengthAbscissa;
         
-        p_timesList.sort(null);
-        p_energyList.sort(null);
-        p_statesLevels.sort(null);
-        
         //INTERVAL CHOICE TO BE REWORKED, DOESN'T WORK WELL AT THE MOMENT
 
         //cutting the timespan of the experiment into a given number of intervals (here 5000) and puting the number of recombined electrons during each intervals
+        p_timesList.sort(null);
         BigDecimal maxTime = p_timesList.get(p_timesList.size() - 1);
         BigDecimal timeInterval = maxTime.divide(new BigDecimal("5000"), MathContext.DECIMAL128);
         for (BigDecimal currentTime = BigDecimal.ZERO ; currentTime.compareTo(maxTime) == -1 ; currentTime = currentTime.add(timeInterval))
@@ -70,6 +67,7 @@ public class SimulationSorter
         }
         
         //the interval for the energy is given in the constructor
+        p_energyList.sort(null);
         BigDecimal minEnergy = p_energyList.get(0);
         BigDecimal maxEnergy = p_energyList.get(p_energyList.size() - 1);
         BigDecimal maxCounts = BigDecimal.ZERO;
@@ -103,6 +101,7 @@ public class SimulationSorter
         m_spectra = new ContinuousFunction(m_energies);
         
         //density of state calculation
+        p_statesLevels.sort(null);
         BigDecimal minState = p_statesLevels.get(0);
         BigDecimal maxState = p_statesLevels.get(p_statesLevels.size() - 1);
         BigDecimal DOSInterval = (new BigDecimal("0.002")).multiply(PhysicsVariables.EV);
