@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 alafuente
+ * Copyright (C) 2021 Alban Lafuente
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
