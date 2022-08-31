@@ -1,4 +1,4 @@
-# AFMLuminescence
+# NanoHikari
 
 ## Goal
 
